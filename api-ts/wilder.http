@@ -1,0 +1,37 @@
+###
+POST http://127.0.0.1:4000/api/wilders HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Valentin",
+    "city": "Tullins",
+    "skills":[
+        {"title": "express", "votes":5},
+        {"title": "mongo", "votes":12}
+    ]
+}
+
+###
+GET http://127.0.0.1:4000/api/wilders HTTP/1.1
+
+###
+
+GET http://127.0.0.1:4000/api/wilders/62286468f50eee38c1fe0158 HTTP/1.1
+
+###
+
+DELETE http://127.0.0.1:4000/api/wilders/622783bba94be564d464bcad HTTP/1.1
+
+
+###
+PATCH http://127.0.0.1:4000/api/wilders/622778ceeb5c77c442ec4dfe HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Thomas",
+    "city": "SF",
+    "skills": [
+        {"title": "express", "votes":5},
+        {"title": "mongo", "votes":12}
+    ]
+}

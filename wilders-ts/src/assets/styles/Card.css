@@ -1,0 +1,14 @@
+/* 
+* card-layout. css 
+*/
+.card h3 em {
+    padding: 0.25em;
+    background-color: #eddbff;
+    border-radius: 4px;
+}
+
+.card p,
+.card ul {
+    color: #757575;
+    line-height: 1.5;
+}

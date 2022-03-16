@@ -4,7 +4,11 @@ import fs = require('fs');
 import path = require('path');
 
 function asyncHandleRequest(handler: Function): RequestHandler {
-    return async function (req: Request, res: Response, next: NextFunction): Promise<void> {
+    return async function (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
         try {
             await handler(req, res, next)
         } catch (error: any) {
@@ -15,7 +19,11 @@ function asyncHandleRequest(handler: Function): RequestHandler {
 
 
 class ImageController {
-    create = asyncHandleRequest(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    create = asyncHandleRequest(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         const obj = {
             name: req.body.name,
             desc: req.body.desc,
@@ -34,7 +42,11 @@ class ImageController {
             }
         });
     });
-    retrieve = asyncHandleRequest(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    retrieve = asyncHandleRequest(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         imgModel.find({}, (err, items) => {
             if (err) {
                 console.log(err);

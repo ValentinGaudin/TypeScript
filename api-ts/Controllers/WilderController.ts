@@ -1,9 +1,12 @@
 import WilderModel from "../src/models/wilder";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 
-
 function asyncHandleRequest(handler: Function): RequestHandler {
-    return async function (req: Request, res: Response, next: NextFunction): Promise<void> {
+    return async function (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
         try {
             await handler(req, res, next)
         } catch (error: any) {
@@ -12,8 +15,12 @@ function asyncHandleRequest(handler: Function): RequestHandler {
     }
 };
 
-class WilderController  {
-    create = asyncHandleRequest(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+class WilderController {
+    create = asyncHandleRequest(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         try {
             WilderModel.init();
             const wilder = new WilderModel(req.body);
@@ -25,19 +32,35 @@ class WilderController  {
             } throw error;
         }
     });
-    retrieve = asyncHandleRequest(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    retrieve = asyncHandleRequest(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         const allWilders = await WilderModel.find();
         res.json(allWilders);
     });
-    retrieveOne = asyncHandleRequest(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    retrieveOne = asyncHandleRequest(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         const oneWilder = await WilderModel.findById(req.params['id']);
         res.json(oneWilder);
     });
-    remove = asyncHandleRequest(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    remove = asyncHandleRequest(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         const wilder = await WilderModel.findByIdAndDelete(req.params['id']);
         res.json(wilder);
     });
-    update = asyncHandleRequest(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    update = asyncHandleRequest(async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         const updatedWilder = await WilderModel.findByIdAndUpdate(req.params['id'], req.body);
         res.json(updatedWilder);
     });

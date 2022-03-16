@@ -15,11 +15,10 @@ async function init(): Promise<void> {
     });
 
     //Middleware
-    app.use(toDoRouter);
     app.use(express.urlencoded({ extended: false }));
-    app.use(bodyParser.json())
     app.use(express.json());
     app.use(cors());
+    app.use(toDoRouter);
 
     var storage = multer.diskStorage({
         destination: (req: Request, file, cb): void => {
@@ -29,7 +28,7 @@ async function init(): Promise<void> {
             cb(null, file.fieldname + '-' + Date.now())
         }
     });
-    
+
     var upload = multer({ storage: storage });
 
     // Set EJS as templating engine 
@@ -42,6 +41,7 @@ async function init(): Promise<void> {
 
     //HTTP 404 Error
     app.use((req: Request, res: Response, next: NextFunction) => {
+        console.log("hello");
         res.status(404).json({ message: 'Not found' });
     });
 

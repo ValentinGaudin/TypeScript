@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface Iimage {
+interface IImage {
     name: String,
     desc: String,
     img:
@@ -11,7 +11,7 @@ interface Iimage {
 };
 
 const Schema = mongoose.Schema;
-const ImageSchema = new Schema<Iimage>({
+const ImageSchema = new Schema<IImage>({
     name: String,
     desc: String,
     img:

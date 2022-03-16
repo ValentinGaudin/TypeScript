@@ -24,6 +24,7 @@ class ImageController {
         res: Response,
         next: NextFunction
     ): Promise<void> => {
+        console.log("hello world")
         const obj = {
             name: req.body.name,
             desc: req.body.desc,

@@ -3,12 +3,15 @@ POST http://127.0.0.1:4000/api/wilders HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Valentin",
+    "name": "Lyon",
     "city": "Tullins",
     "skills":[
         {"title": "express", "votes":5},
         {"title": "mongo", "votes":12}
-    ]
+    ],
+    "img":[{
+        "data": "", "contentType": ""
+    }]
 }
 
 ###
@@ -35,3 +38,20 @@ content-type: application/json
         {"title": "mongo", "votes":12}
     ]
 }
+
+###
+POST http://127.0.0.1:4000/api/images HTTP/1.1
+content-type: multipart/form-data
+
+{
+    "name": "JPG",
+    "desc": "This is a image",
+    "img":
+    {
+        "data": "012",
+        "contentType": "String"
+    }
+}
+
+###
+GET http://127.0.0.1:4000/api/images HTTP/1.1

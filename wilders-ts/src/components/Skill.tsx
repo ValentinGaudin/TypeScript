@@ -1,17 +1,9 @@
-import '../assets/styles/Skills.css'
 import styledComponents from 'styled-components';
+import { ISkill } from "../interface/interface"
+interface Iprops extends ISkill{
+}
 
-export default class Skill {
-    public title: string;
-    public votes: number;
-
-    constructor(title: string, votes: number) {
-        this.title = title;
-        this.votes = votes;
-    }
-
-
-    Skill(skill: Skill) {
+function Skill(props: Iprops) {
 
     const Skills = styledComponents.div`
     margin: 0;
@@ -38,7 +30,7 @@ export default class Skill {
     justify-content: center;
 
     /* Colors */
-    background-color: ${(skill.votes) > 10 ? 'red' : 'green'};
+    background-color: ${(props.votes) > 10 ? 'red' : 'green'};
     color: #fff;
 
     /* Rounded border */
@@ -52,10 +44,10 @@ export default class Skill {
             <Skills>
                 <ul >
                     <li>
-                        {skill.title}
+                        {props.title}
                         <Votes>
-                            <span >
-                                {skill.votes}
+                            <span>
+                                {props.votes}
                             </span>
                         </Votes>
                     </li>
@@ -63,6 +55,6 @@ export default class Skill {
             </Skills>
         </div>
     );
-
-    }
 }
+
+export default Skill;

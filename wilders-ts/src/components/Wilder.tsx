@@ -2,20 +2,18 @@ import '../assets/styles/Card.css';
 import blank_profile from '../assets/images/blank_profile.png';
 import styledComponents from 'styled-components';
 import { useState } from 'react';
-import Skills from './Skill';
+import Skill from './Skill';
+import { IWilder } from "../interface/interface"
 
-export default class Wilder {
-    public name: string;
-    public city: string;
-    public skills: Skills;
 
-    constructor(name: string, city: string, skills: Skills) {
-        this.name = name;
-        this.city = city;
-        this.skills = skills;
-    }
 
-Wilder(Wilder:Wilder  ,_id: number, onWilderDeleted: any, onError: any) {
+interface Iprops extends IWilder{
+    onWilderDeleted: () => void,
+    onError: () => void,
+}
+
+
+function Wilder(props: Iprops) {
     const [isDelete, setIsDeleted] = useState(false)
 
     async function deleteWilder() {
@@ -24,17 +22,17 @@ Wilder(Wilder:Wilder  ,_id: number, onWilderDeleted: any, onError: any) {
             console.log("Hello world");
             console.log(result);
             if (result === true) {
-                await fetch("http://127.0.0.1:4000/api/wilders/" + _id, { method: "DELETE" })
+                await fetch("http://127.0.0.1:4000/api/wilders/", { method: "DELETE" })
                 setIsDeleted(true);
-                if (onWilderDeleted) {
-                    onWilderDeleted();
+                if (props.onWilderDeleted) {
+                    props.onWilderDeleted();
                 }
             } else {
                 setIsDeleted(false);
             };
         } catch (error: any) {
-            if (onError) {
-                onError();
+            if (props.onError) {
+                props.onError();
             }
         }
     }
@@ -65,25 +63,25 @@ Wilder(Wilder:Wilder  ,_id: number, onWilderDeleted: any, onError: any) {
     justify-content: space-between;
     `;
 
-        return (
-            <div>
-                <Article>
-                    <Section>
-                        <img src={blank_profile} alt={this.name} />
-                        <h3>
-                            {this.name} from {this.city}
-                        </h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim illum doloremque, maxime ab voluptates quis, a, eius dolores asperiores tenetur quo inventore fuga qui sequi.
-                        </p>
-                        <h4>
-                            Wild Skills
-                        </h4>
-                        {/* {this.skills?.map((skill, index: number) => <Skill key={index} title={skill.title} votes={skill.votes} />)} */}
-                        <button type="button" onClick={() => deleteWilder()}> Delete ? </button>
-                    </Section>
-                </Article>
-            </div>
-        );
-    }
+    return (
+        <div>
+            <Article>
+                <Section>
+                    <img src={blank_profile} alt={props.name} />
+                    <h3>
+                        {props.name} from {props.city}
+                    </h3>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim illum doloremque, maxime ab voluptates quis, a, eius dolores asperiores tenetur quo inventore fuga qui sequi.
+                    </p>
+                    <h4>
+                        Wild Skills
+                    </h4>
+                    {props.skills.map((skill, index: number) => <Skill key={index} title={skill.title} votes={skill.votes} />)}
+                    <button type="button" onClick={() => deleteWilder()}> Delete ? </button>
+                </Section>
+            </Article>
+        </div>
+    );
 }
+export default Wilder;

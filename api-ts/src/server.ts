@@ -1,10 +1,8 @@
 import express from "express";
-import mongoose = require("mongoose");
+import mongoose from "mongoose";
 import cors from "cors";
 import { Request, Response, NextFunction } from "express";
 import { toDoRouter } from './routes/routes';
-import bodyParser = require("body-parser");
-import multer = require("multer");
 
 const app = express();
 
@@ -20,16 +18,7 @@ async function init(): Promise<void> {
     app.use(cors());
     app.use(toDoRouter);
 
-    var storage = multer.diskStorage({
-        destination: (req: Request, file, cb): void => {
-            cb(null, 'uploads')
-        },
-        filename: (req: Request, file, cb): void => {
-            cb(null, file.fieldname + '-' + Date.now())
-        }
-    });
-
-    var upload = multer({ storage: storage });
+    console.log("hello");
 
     // Set EJS as templating engine 
     app.set("view engine", "ejs");
@@ -41,7 +30,6 @@ async function init(): Promise<void> {
 
     //HTTP 404 Error
     app.use((req: Request, res: Response, next: NextFunction) => {
-        console.log("hello");
         res.status(404).json({ message: 'Not found' });
     });
 

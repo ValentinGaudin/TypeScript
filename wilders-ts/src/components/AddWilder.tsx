@@ -7,15 +7,26 @@ function AddWilder(props: {
 }) {
     const [name, setName] = useState<string>("");
     const [city, setCity] = useState<string>("");
-    const [skill, setSkill] = useState<ISkill>({ title: "Hello World", votes: 10 })
-    const [skills, setSkills] = useState<ISkill[]>([])
+    const [skills, setSkills] = useState<ISkill[]>([]);
+    const [imgFile, setImgFile] = useState<string>("");
+    const [selectedFile, setSelectedFile] = useState();
+    const [isFilePicked, setIsFilePicked] = useState(false);
     const [error, setError] = useState("");
-    
+
+    const changeHandler = (e: any) => {
+        setImgFile(URL.createObjectURL(e.target.files[0]))
+        setSelectedFile(e.target.files[0]);
+        setIsFilePicked(true);
+    };
 
     const addSkill = (): void => {
-        setSkills([...skills, skill]);
-        setSkill({ title: "Hello World", votes: 10 });
+        const newSkill = skills.slice();
+        newSkill.push({ title: "", votes: 0 });
+        setSkills(newSkill);
     };
+    const deleteSkill = ():void => {
+        
+    }
 
     return (
         <form
@@ -42,8 +53,21 @@ function AddWilder(props: {
                         props.onError();
                     };
                 };
-            }
-        }
+                const formData = new FormData();
+                formData.append('File', 'avatar');
+                console.log(formData);
+                await fetch('http://127.0.0.1:4000/api/images', { method: "POST", body: formData })
+
+                    .then((response) => response.json())
+                    .then((response) => console.log(response))
+                    .then((result) => {
+                        console.log('Success:', result);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+
+            }}
         >
             <label htmlFor="name">Name :</label>
             <input
@@ -62,20 +86,7 @@ function AddWilder(props: {
                 onChange={(e) => setCity(e.target.value)}
             />
             <label htmlFor="city">Skills :</label>
-            <input
-                id="title"
-                type="text"
-                placeholder="Your's skill"
-                value={skill.title}
-                onChange={(e) => setSkill({ ...skill, title: e.target.value })}
-            />
-            <input
-                id="votes"
-                type="number"
-                placeholder="Type the votes"
-                value={skill.votes}
-                onChange={(e) => setSkill({ ...skill, votes: +e.target.value })}
-            />
+
             <button
                 onClick={(e) => {
                     e.preventDefault();
@@ -84,6 +95,44 @@ function AddWilder(props: {
             >
                 Add Skill
             </button>
+
+            {skills.map((skill, index) => <div key={index}>
+                <input
+                    id="title"
+                    type="text"
+                    placeholder="Your's skill"
+                    value={skill.title}
+                    onChange={(e) => {
+                        const newValue = e.target.value;
+                        const newSkills = skills.slice();
+                        newSkills.splice(index, 1, { ...skill, title: newValue })
+                        setSkills(newSkills);
+                    }}
+                />
+                <input
+                    id="votes"
+                    type="number"
+                    placeholder="Type the votes"
+                    value={skill.votes}
+                    onChange={(e) => {
+                        const newValue = e.target.value;
+                        const newSkills = skills.slice();
+                        newSkills.splice(index, 1, { ...skill, votes: +newValue })
+                        setSkills(newSkills);
+
+                    }}
+                />
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    deleteSkill()
+                }}>Delete Skill</button>
+            </div>)}
+            <input
+                id="avatar"
+                type="file"
+                onChange={changeHandler}
+            />
+            <img src={imgFile} height="200" width="200" />
             {error !== "" && <>{error}</>}
             <button>Add</button>
         </form>

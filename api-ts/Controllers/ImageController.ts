@@ -17,7 +17,6 @@ function asyncHandleRequest(handler: Function): RequestHandler {
     }
 };
 
-
 class ImageController {
     create = asyncHandleRequest(async (
         req: Request,
@@ -25,37 +24,34 @@ class ImageController {
         next: NextFunction
     ): Promise<void> => {
         console.log("hello world")
-        const obj = {
-            name: req.body.name,
-            desc: req.body.desc,
-            img: {
-                data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file?.filename)),
-                contentType: 'image/png'
+        if (req.file) {
+            const obj = {
+                name: req.body.name,
+                desc: req.body.desc,
+                img: {
+                    data: fs.readFileSync(path.join(process.cwd(), 'images', req.file.filename)),
+                    contentType: 'image/png'
+                }
             }
+            imgModel.create(obj, (err: any, item) => {
+                if (err) {
+                    console.error();
+                }
+                else {
+                    // item.save();
+                    res.json({ _id: item._id })
+                }
+            });
         }
-        imgModel.create(obj, (err: any, item) => {
-            if (err) {
-                console.error();
-            }
-            else {
-                // item.save();
-                res.redirect('/');
-            }
-        });
     });
-    retrieve = asyncHandleRequest(async (
+    retrieveOne = asyncHandleRequest(async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        imgModel.find({}, (err, items) => {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.render('imagesPage', { items: items });
-            }
-        })
+        const oneImage = await imgModel.findById(req.params['id']);
+        res.setHeader("content-type", oneImage?.img?.contentType as string);
+        res.send(oneImage?.img.data);
     });
 };
 export { ImageController as ImgController }

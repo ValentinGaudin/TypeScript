@@ -3,15 +3,13 @@ POST http://127.0.0.1:4000/api/wilders HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Lyon",
+    "name": "baba",
     "city": "Tullins",
     "skills":[
         {"title": "express", "votes":5},
         {"title": "mongo", "votes":12}
     ],
-    "img":[{
-        "data": "", "contentType": ""
-    }]
+    "image": "62324987a382f6925882ca3b"
 }
 
 ###
@@ -19,7 +17,7 @@ GET http://127.0.0.1:4000/api/wilders HTTP/1.1
 
 ###
 
-GET http://127.0.0.1:4000/api/wilders/62286468f50eee38c1fe0158 HTTP/1.1
+GET http://127.0.0.1:4000/api/wilders/6232f3acf5166e2ab7720513 HTTP/1.1
 
 ###
 

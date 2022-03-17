@@ -1,8 +1,9 @@
-import express from "express";
+
 import mongoose from "mongoose";
 import cors from "cors";
-import { Request, Response, NextFunction } from "express";
-import { toDoRouter } from './routes/routes';
+import express, { Request, Response, NextFunction, json, urlencoded } from 'express';
+import { wilderRouter } from './routes/wilderRoutes';
+import { imageRouter } from './routes/imageRoutes';
 
 const app = express();
 
@@ -13,18 +14,18 @@ async function init(): Promise<void> {
     });
 
     //Middleware
-    app.use(express.urlencoded({ extended: false }));
-    app.use(express.json());
+    app.use(express.static(__dirname + '/public'));
+    app.use(urlencoded({ extended: true }));
+    app.use(json());
     app.use(cors());
-    app.use(toDoRouter);
+    app.use("/api/wilders", wilderRouter);
+    app.use("/api/images", imageRouter);
 
     console.log("hello");
 
-    // Set EJS as templating engine 
-    app.set("view engine", "ejs");
-
     //HTTP 500 Error
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+        console.log(err);
         res.status(500).json({ message: 'An internal error occured' });
     });
 

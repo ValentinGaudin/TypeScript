@@ -1,5 +1,8 @@
 import WilderModel from "../src/models/wilder";
+import imgModel from "../src/models/image";
 import { Request, Response, NextFunction, RequestHandler } from "express";
+import fs = require('fs');
+import path = require('path');
 
 function asyncHandleRequest(handler: Function): RequestHandler {
     return async function (
@@ -14,6 +17,7 @@ function asyncHandleRequest(handler: Function): RequestHandler {
         }
     }
 };
+
 
 class WilderController {
     create = asyncHandleRequest(async (
@@ -37,7 +41,7 @@ class WilderController {
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const allWilders = await WilderModel.find();
+        const allWilders = await WilderModel.find().select("-__v");
         res.json(allWilders);
     });
     retrieveOne = asyncHandleRequest(async (
@@ -45,7 +49,7 @@ class WilderController {
         res: Response,
         next: NextFunction
     ): Promise<void> => {
-        const oneWilder = await WilderModel.findById(req.params['id']);
+        const oneWilder = await WilderModel.findById(req.params['id']).select("-__v");;
         res.json(oneWilder);
     });
     remove = asyncHandleRequest(async (

@@ -4,40 +4,12 @@ import styledComponents from 'styled-components';
 import { useState } from 'react';
 import Skill from './Skill';
 import { IWilder } from "../interface/interface"
-
-
-
-interface Iprops extends IWilder{
+interface Iprops extends IWilder {
     onWilderDeleted: () => void,
     onError: () => void,
 }
 
-
-function Wilder(props: Iprops) {
-    const [isDelete, setIsDeleted] = useState(false)
-
-    async function deleteWilder() {
-        try {
-            let result = window.confirm("Press a button!\nEither OK or Cancel.");
-            console.log("Hello world");
-            console.log(result);
-            if (result === true) {
-                await fetch("http://127.0.0.1:4000/api/wilders/", { method: "DELETE" })
-                setIsDeleted(true);
-                if (props.onWilderDeleted) {
-                    props.onWilderDeleted();
-                }
-            } else {
-                setIsDeleted(false);
-            };
-        } catch (error: any) {
-            if (props.onError) {
-                props.onError();
-            }
-        }
-    }
-
-    const Article = styledComponents.article`
+const Article = styledComponents.article`
     display: flex;
     padding: 20px;
     border: 1px solid #c9c9c9;
@@ -55,19 +27,54 @@ function Wilder(props: Iprops) {
     grid-template-columns: 1fr auto;
     align-items: start;
     }
-    `;
+`;
 
-    const Section = styledComponents.section`
+const Section = styledComponents.section`
     display: grid;
     grid-template-columns: repeat(3, 32%);
     justify-content: space-between;
-    `;
+`;
+
+
+function Wilder(props: { _id: string, image: string } & Iprops) {
+    const [isDelete, setIsDeleted] = useState<boolean>(false)
+
+    const randomNumber = Math.floor(Math.random()* 100);
+
+    function chooseSexe(): string {
+        if (Math.random() > 0.5){
+        return "men";
+        } else {
+            return "women"
+        }
+    }
+
+    async function deleteWilder(): Promise<void> {
+        try {
+            let result: boolean = window.confirm("Press a button!\nEither OK or Cancel.");
+            console.log("Hello world");
+            console.log(result);
+            if (result === true) {
+                await fetch("http://127.0.0.1:4000/api/wilders/" + props._id, { method: "DELETE" })
+                setIsDeleted(true);
+                if (props.onWilderDeleted) {
+                    props.onWilderDeleted();
+                }
+            } else {
+                setIsDeleted(false);
+            };
+        } catch (error: any) {
+            if (props.onError) {
+                props.onError();
+            }
+        };
+    };
 
     return (
         <div>
             <Article>
                 <Section>
-                    <img src={blank_profile} alt={props.name} />
+                    <img src={props.image ? `http://127.0.0.1:4000/api/images/${props.image}` : `https://randomuser.me/api/portraits/${chooseSexe()}/${randomNumber}.jpg`} alt={props.name} />
                     <h3>
                         {props.name} from {props.city}
                     </h3>

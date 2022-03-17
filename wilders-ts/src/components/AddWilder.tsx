@@ -1,22 +1,21 @@
-import { title } from 'process';
-import React from 'react';
 import { useState } from 'react';
-import { ISkill } from './Skill';
-import Wilder, { IWilder } from './Wilder';
-
-
+import { ISkill } from '../interface/interface';
 
 function AddWilder(props: {
     onWilderCreated: () => void,
     onError: () => void
 }) {
-    const [name, setName] = useState("");
-    const [city, setCity] = useState("");
-    const [skill, setSkill] = useState([
-        { title: useState('') },
-        { votes: useState(0) }
-    ]);
+    const [name, setName] = useState<string>("");
+    const [city, setCity] = useState<string>("");
+    const [skill, setSkill] = useState<ISkill>({ title: "Hello World", votes: 10 })
+    const [skills, setSkills] = useState<ISkill[]>([])
     const [error, setError] = useState("");
+    
+
+    const addSkill = (): void => {
+        setSkills([...skills, skill]);
+        setSkill({ title: "Hello World", votes: 10 });
+    };
 
     return (
         <form
@@ -26,12 +25,8 @@ function AddWilder(props: {
                     const data = {
                         name: name,
                         city: city,
-                        skills: [{
-                            title: title,
-                            votes: votes,
-                        }]
+                        skills: skills
                     };
-
                     const res = await fetch('http://127.0.0.1:4000/api/wilders', { method: "POST", body: JSON.stringify(data), headers: { 'content-type': 'application/json' } });
                     console.log(data);
                     setName('');
@@ -39,16 +34,16 @@ function AddWilder(props: {
                     if (props.onWilderCreated) {
                         props.onWilderCreated()
                     }
-                    if (res.data.success) {
+                    if (res.ok) {
                         setError("");
                     }
-                } catch (error) {
+                } catch (error: any) {
                     if (props.onError) {
                         props.onError();
-                    }
-                }
-            }}
-
+                    };
+                };
+            }
+        }
         >
             <label htmlFor="name">Name :</label>
             <input
@@ -71,17 +66,25 @@ function AddWilder(props: {
                 id="title"
                 type="text"
                 placeholder="Your's skill"
-                value={title}
-                onChange={(e) => setSkill(e.target.value)}
+                value={skill.title}
+                onChange={(e) => setSkill({ ...skill, title: e.target.value })}
             />
             <input
                 id="votes"
                 type="number"
                 placeholder="Type the votes"
-                value={votes}
-                onChange={(e) => setSkill(e.target.value)}
+                value={skill.votes}
+                onChange={(e) => setSkill({ ...skill, votes: +e.target.value })}
             />
-            {error !== "" && <error>{error}</error>}
+            <button
+                onClick={(e) => {
+                    e.preventDefault();
+                    addSkill()
+                }}
+            >
+                Add Skill
+            </button>
+            {error !== "" && <>{error}</>}
             <button>Add</button>
         </form>
     );
